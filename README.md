@@ -1,6 +1,6 @@
 # 모바일 컴퓨팅 프로젝트
 
-피그마 링크 
+피그마 링크   
 https://www.figma.com/design/WBXPZUXtl4ihI1vsS8AnKd/%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%BB%B4%ED%93%A8%ED%8C%85-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0-1&t=K9wya0kMUHutZMLB-0
 
 # 시간 환산 앱
