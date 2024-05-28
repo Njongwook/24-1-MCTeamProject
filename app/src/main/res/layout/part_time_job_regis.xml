@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="15sp"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="근무지명"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/part_time_job_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="월급일"
+            android:textSize="20sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/day_salary"
+                android:text="일급"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_margin="5dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/week_salary"
+                android:text="주급"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_margin="5dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/month_salary"
+                android:text="월급"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_margin="5dp"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="세금 및 사대보험"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="세금"
+            android:textSize="20sp"/>
+        <EditText
+            android:id="@+id/tax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="사대보험"
+            android:textSize="20sp"/>
+        <EditText
+            android:id="@+id/insurance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/next"
+        android:text="다음"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue3"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_margin="5dp"
+        android:layout_gravity="end"/>
+</LinearLayout>
