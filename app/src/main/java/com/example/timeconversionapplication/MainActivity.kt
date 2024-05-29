@@ -24,32 +24,5 @@ class MainActivity : AppCompatActivity() {
                 val intent = result.data
             }
         }
-
-
-        binding.btn1.setOnClickListener {
-            val intent: Intent = Intent(this,CalenderActivity::class.java).apply{
-            }
-            try{
-                reqLauncher.launch(intent)
-                // startActivity(intent)
-                Log.d("MYTAG", "move to sub")
-            }
-            catch (e: ActivityNotFoundException){
-                Toast.makeText(applicationContext, "No app for action", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        binding.btn2.setOnClickListener {
-            val intent: Intent = Intent(this,TipsActivity::class.java).apply{
-            }
-            try{
-                reqLauncher.launch(intent)
-                // startActivity(intent)
-                Log.d("MYTAG", "move to sub")
-            }
-            catch (e: ActivityNotFoundException){
-                Toast.makeText(applicationContext, "No app for action", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 }
