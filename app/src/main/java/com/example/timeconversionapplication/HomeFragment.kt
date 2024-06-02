@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.timeconversionapplication.databinding.ActivityMainBinding
 import com.example.timeconversionapplication.databinding.FragmentHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match

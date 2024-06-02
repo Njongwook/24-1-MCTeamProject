@@ -3,6 +3,9 @@
 피그마 링크   
 https://www.figma.com/design/WBXPZUXtl4ihI1vsS8AnKd/%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%BB%B4%ED%93%A8%ED%8C%85-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0-1&t=K9wya0kMUHutZMLB-0
 
+DB 구조 링크  
+https://www.erdcloud.com/d/cqAfgZa63JFrmvboe
+
 # 시간 환산 앱
 소득 데이터를 기반으로 특정 물건을 구입하기 위해 일해야 하는 시간을 보여주는 계산기
 ## 주 기능
