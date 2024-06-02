@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import android.util.Log
 
 class MyDatabase {
     object MyDBContract {
@@ -12,6 +13,7 @@ class MyDatabase {
             const val place_name = "place_name"
             const val salary_style = "salary_style"
             const val salary_day = "salary_day"
+            const val hourly = "hourly"
             const val tax = "tax"
             const val insurance = "insurance"
         }
@@ -20,6 +22,8 @@ class MyDatabase {
             const val date = "date"
             const val work_time = "work_time"
             const val break_time = "break_time"
+            const val place_name = "place_name"
+            const val hourly = "hourly"
         }
         object Product : BaseColumns{
             const val TABLE_NAME = "product"
@@ -31,7 +35,10 @@ class MyDatabase {
             const val TABLE_NAME = "Dday"
             const val Dtime = "Dtime"
             const val Dday = "Dday"
-
+            const val product_name = "product_name"
+            const val product_price = "product_price"
+            const val place_name = "place_name"
+            const val hourly = "hourly"
         }
     }
     class MyDBHelper(context: Context) :SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
@@ -40,13 +47,22 @@ class MyDatabase {
                     "${MyDBContract.WorkPlace.place_name} TEXT PRIMARY KEY," +
                     "${MyDBContract.WorkPlace.salary_style} INTEGER," +
                     "${MyDBContract.WorkPlace.salary_day} INTEGER," +
+                    "${MyDBContract.WorkPlace.hourly} INTEGER," +
                     "${MyDBContract.WorkPlace.tax} INTEGER," +
                     "${MyDBContract.WorkPlace.insurance} INTEGER);"
         val SQL_CREATE_WORK_TIME_ENTRIES =
             "CREATE TABLE ${MyDBContract.WorkTime.TABLE_NAME}(" +
-                    "${MyDBContract.WorkTime.date} DATE PRIMARY KEY," +
-                    "${MyDBContract.WorkTime.work_time} TIME," +
-                    "${MyDBContract.WorkTime.break_time} INTEGER);"
+                    "${MyDBContract.WorkTime.date} TEXT PRIMARY KEY," +
+                    "${MyDBContract.WorkTime.work_time} TEXT," +
+                    "${MyDBContract.WorkTime.break_time} TEXT," +
+                    "${MyDBContract.WorkTime.place_name} TEXT," +
+                    "${MyDBContract.WorkTime.hourly} INTEGER," +
+                    "CONSTRAINT PLACE_NAME_TIME_FK FOREIGN KEY (${MyDBContract.WorkTime.place_name})" +
+                    "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.place_name})" +
+                    "ON DELETE SET NULL," +
+                    "CONSTRAINT HOURLY_TIME_FK FOREIGN KEY (${MyDBContract.WorkTime.hourly})" +
+                    "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.hourly})" +
+                    "ON DELETE SET NULL);"
         val SQL_CREATE_PRODUCT_ENTRIES =
             "CREATE TABLE ${MyDBContract.Product.TABLE_NAME}(" +
                     "${MyDBContract.Product.product_name} TEXT PRIMARY KEY," +
@@ -55,7 +71,24 @@ class MyDatabase {
         val SQL_CREATE_DDAY_ENTRIES =
             "CREATE TABLE ${MyDBContract.Dday.TABLE_NAME}(" +
                     "${MyDBContract.Dday.Dtime} INTEGER," +
-                    "${MyDBContract.Dday.Dday} INTEGER);"
+                    "${MyDBContract.Dday.Dday} INTEGER," +
+                    "${MyDBContract.Dday.product_name} TEXT," +
+                    "${MyDBContract.Dday.product_price} INTEGER," +
+                    "${MyDBContract.Dday.place_name} TEXT," +
+                    "${MyDBContract.Dday.hourly} INTEGER," +
+                    "PRIMARY KEY (${MyDBContract.Dday.product_name}, ${MyDBContract.Dday.Dday})," +
+                    "CONSTRAINT PRODUCT_NAME_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.product_name})" +
+                    "REFERENCES ${MyDBContract.Product.TABLE_NAME} (${MyDBContract.Product.product_name})" +
+                    "ON DELETE SET NULL," +
+                    "CONSTRAINT PRICE_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.product_price})" +
+                    "REFERENCES ${MyDBContract.Product.TABLE_NAME} (${MyDBContract.Product.price})" +
+                    "ON DELETE SET NULL," +
+                    "CONSTRAINT PLACE_NAME_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.place_name})" +
+                    "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.place_name})" +
+                    "ON DELETE SET NULL," +
+                    "CONSTRAINT HOURLY_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.hourly})" +
+                    "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.hourly})" +
+                    "ON DELETE SET NULL);"
 
         val SQL_DELETE_WORK_PLACE_ENTRIES =
             "DROP TABLE IF EXISTS ${MyDBContract.WorkPlace.TABLE_NAME}"
@@ -84,6 +117,68 @@ class MyDatabase {
         companion object {
             const val DATABASE_VERSION = 1
             const val DATABASE_NAME = "myDBfile.db"
+        }
+
+        fun <T> selectAll(tableName: String, clazz: Class<T>) : MutableList<T>{
+            val readList = mutableListOf<T>()
+            val db= readableDatabase
+            val cursor = db.rawQuery("SELECT * FROM $tableName;", null)
+            Log.d("TAG", "Select All Query: " + "SELECT * FROM $tableName;")
+            Log.d("TAG", cursor.toString())
+            with(cursor) {
+                while (moveToNext()) {
+                    when (clazz) {
+                        WorkPlace::class.java -> {
+                            readList.add(clazz.getConstructor(String::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java)
+                                .newInstance(
+                                    cursor.getString(0),
+                                    cursor.getInt(1),
+                                    cursor.getInt(2),
+                                    cursor.getInt(3),
+                                    cursor.getInt(4),
+                                    cursor.getInt(5)
+                                ) as T
+                            )
+                        }
+                        WorkTime::class.java -> {
+                            readList.add(clazz.getConstructor(String::class.java, String::class.java, String::class.java, String::class.java, Int::class.java)
+                                .newInstance(
+                                    cursor.getString(0),
+                                    cursor.getString(1),
+                                    cursor.getString(2),
+                                    cursor.getString(3),
+                                    cursor.getInt(4)
+                                ) as T
+                            )
+                        }
+                        Product::class.java -> {
+                            readList.add(clazz.getConstructor(String::class.java, Int::class.java, String::class.java,)
+                                .newInstance(
+                                    cursor.getString(0),
+                                    cursor.getInt(1),
+                                    cursor.getString(2),
+                                ) as T
+                            )
+                        }
+                        Dday::class.java -> {
+                            readList.add(clazz.getConstructor(Int::class.java, Int::class.java, String::class.java, Int::class.java, String::class.java, Int::class.java,)
+                                .newInstance(
+                                    cursor.getInt(0),
+                                    cursor.getInt(1),
+                                    cursor.getString(2),
+                                    cursor.getInt(3),
+                                    cursor.getString(4),
+                                    cursor.getInt(5),
+                                ) as T
+                            )
+                        }
+                        else -> throw IllegalArgumentException("Unknown class type")
+                    }
+                }
+            }
+            cursor.close()
+            db.close()
+            return readList
         }
     }
 }
