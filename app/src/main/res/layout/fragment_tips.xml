@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical">
     <LinearLayout
+        android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -32,7 +33,6 @@
                 android:text="나도 근로장려금 신청 대상일까? 확인해보세요"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/btn1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -41,6 +41,7 @@
             android:text=">"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/btn2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -69,7 +70,6 @@
                 android:text="건강진단결과서 발급 방법에 대해 알아보세요"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/btn2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -78,6 +78,7 @@
             android:text=">"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/btn3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -106,7 +107,6 @@
                 android:text="임금을 받지 못했다면? 노동포털에서 신고하세요"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/btn3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -115,6 +115,7 @@
             android:text=">"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/btn4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -143,7 +144,6 @@
                 android:text="K패스 사용하고 교통비 환급받으세요"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/btn4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -152,6 +152,7 @@
             android:text=">"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/btn5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -180,7 +181,6 @@
                 android:text="달라진 청년 내일 저축 계좌에 대해 알아보세요"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/btn5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -189,6 +189,7 @@
             android:text=">"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/btn6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -217,7 +218,6 @@
                 android:text="네이버 플러스 가입하시고 다양한 혜택 받으세요"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/btn6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -226,6 +226,7 @@
             android:text=">"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/btn7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -254,7 +255,6 @@
                 android:text="잊지 말고 2차 국장 신청하세요!"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/btn7"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
