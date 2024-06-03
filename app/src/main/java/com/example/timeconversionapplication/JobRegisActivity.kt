@@ -14,11 +14,16 @@ class JobRegisActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PartTimeJobRegisBinding.inflate(layoutInflater)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(binding.root)
 
         binding.next.setOnClickListener {
             val intent = Intent(this, JobRegisDetailActivity::class.java)
             startActivity(intent)
         }
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }
