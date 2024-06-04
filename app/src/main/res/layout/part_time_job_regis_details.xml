@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,12 +21,14 @@
         <EditText
             android:id="@+id/salary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:inputType="number"/>
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
-        <TextView
+
+        <!--<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="근무시간"
@@ -33,30 +36,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:gravity="center"
+            android:orientation="horizontal">-->
 
-            <TimePicker
-                android:id="@+id/start_time"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+        <!--<EditText
+            android:id="@+id/start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textSize="30sp" />
+
+        <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:timePickerMode="spinner"
-                android:background="@color/grey"
-                android:layout_margin="5dp"/>
-
-            <TimePicker
+                android:text="  -  "
+                android:textSize="30dp" />
+            <EditText
                 android:id="@+id/end_time"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:timePickerMode="spinner"
-                android:background="@color/grey"
-                android:layout_margin="5dp"/>
-        </LinearLayout>
+                android:text="00:00"
+                android:textSize="30sp"/>-->
+        <!--</LinearLayout>-->
 
-
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -68,6 +74,10 @@
             android:id="@+id/beak_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -125,7 +135,6 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/summary_salary"
                     android:text="₩"
                     android:gravity="right"
                     android:textSize="20sp"
@@ -133,10 +142,12 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
+
                 <EditText
+                    android:id="@+id/summary_salary"
                     android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2" />
             </LinearLayout>
 
             <LinearLayout
@@ -151,7 +162,6 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/summary_tax"
                     android:text="₩"
                     android:gravity="right"
                     android:textSize="20sp"
@@ -159,10 +169,12 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
+
                 <EditText
+                    android:id="@+id/summary_tax"
                     android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="insurance_array">
+        <item>소득세+사대보험</item>
+        <item>직접입력</item>
+    </string-array>
+</resources>
