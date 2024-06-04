@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,7 +21,97 @@
         <EditText
             android:id="@+id/salary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:inputType="number"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="근무 요일"
+                android:textSize="20sp"/>
+            <Button
+                android:id="@+id/searchDate"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:text="기간 선택"
+                android:gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_margin="3dp"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:id="@+id/monday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="월"
+                android:layout_weight="1" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_margin="3dp"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:id="@+id/tuesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="화"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_margin="3dp"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:id="@+id/wednesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="수"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_margin="3dp"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:id="@+id/thursday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="목"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_margin="3dp"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:id="@+id/friday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="금"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_margin="3dp"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:id="@+id/saturday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="토"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_margin="3dp"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:id="@+id/sunday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="일"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/daysDifference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -33,30 +124,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
-            <TimePicker
+            <Button
                 android:id="@+id/start_time"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:timePickerMode="spinner"
-                android:background="@color/grey"
-                android:layout_margin="5dp"/>
+                android:text="00:00"
+                android:textSize="30sp" />
 
-            <TimePicker
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  -  "
+                android:textSize="30dp" />
+            <Button
                 android:id="@+id/end_time"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:timePickerMode="spinner"
-                android:background="@color/grey"
-                android:layout_margin="5dp"/>
+                android:text="00:00"
+                android:textSize="30sp"/>
         </LinearLayout>
+        <TextView
+            android:id="@+id/timeDifference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시간"/>
 
-
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -65,9 +164,15 @@
             android:textSize="20sp"/>
 
         <EditText
-            android:id="@+id/beak_time"
+            android:id="@+id/break_time"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:hint="0분"
+            android:inputType="number"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -125,7 +230,6 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/summary_salary"
                     android:text="₩"
                     android:gravity="right"
                     android:textSize="20sp"
@@ -133,10 +237,15 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
-                <EditText
+
+                <TextView
+                    android:id="@+id/summary_salary"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:layout_height="wrap_content"/>
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="@color/blue5"/>
             </LinearLayout>
 
             <LinearLayout
@@ -151,7 +260,6 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/summary_tax"
                     android:text="₩"
                     android:gravity="right"
                     android:textSize="20sp"
@@ -159,10 +267,14 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
-                <EditText
+
+                <TextView
+                    android:id="@+id/summary_tax"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:layout_height="wrap_content"/>
+                    android:textColor="@color/blue5"
+                    android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

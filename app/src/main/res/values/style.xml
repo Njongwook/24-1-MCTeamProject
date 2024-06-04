@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- 여기에서 테마를 커스터마이즈합니다 -->
+        <item name="colorPrimary">@color/blue2</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/blue4</item>
+        <item name="android:timePickerStyle" tools:ignore="NewApi">@style/MyTimePickerTheme</item>
+        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar</item>
+    </style>
+    <style name="MyTimePickerTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:timePickerMode" tools:ignore="NewApi">spinner</item>
+    </style>
+</resources>
