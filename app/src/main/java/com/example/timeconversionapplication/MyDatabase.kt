@@ -36,6 +36,7 @@ class MyDatabase {
             const val Dtime = "Dtime"
             const val Dday = "Dday"
             const val product_name = "product_name"
+            const val product_memo = "product_memo"
             const val product_price = "product_price"
             const val place_name = "place_name"
             const val hourly = "hourly"
@@ -74,6 +75,7 @@ class MyDatabase {
                     "${MyDBContract.Dday.Dday} INTEGER," +
                     "${MyDBContract.Dday.product_name} TEXT," +
                     "${MyDBContract.Dday.product_price} INTEGER," +
+                    "${MyDBContract.Dday.product_memo} TEXT," +
                     "${MyDBContract.Dday.place_name} TEXT," +
                     "${MyDBContract.Dday.hourly} INTEGER," +
                     "PRIMARY KEY (${MyDBContract.Dday.product_name}, ${MyDBContract.Dday.Dday})," +
@@ -82,6 +84,9 @@ class MyDatabase {
                     "ON DELETE SET NULL," +
                     "CONSTRAINT PRICE_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.product_price})" +
                     "REFERENCES ${MyDBContract.Product.TABLE_NAME} (${MyDBContract.Product.price})" +
+                    "ON DELETE SET NULL," +
+                    "CONSTRAINT MEMO_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.product_memo})" +
+                    "REFERENCES ${MyDBContract.Product.TABLE_NAME} (${MyDBContract.Product.memo})" +
                     "ON DELETE SET NULL," +
                     "CONSTRAINT PLACE_NAME_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.place_name})" +
                     "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.place_name})" +
@@ -161,14 +166,15 @@ class MyDatabase {
                             )
                         }
                         Dday::class.java -> {
-                            readList.add(clazz.getConstructor(Int::class.java, Int::class.java, String::class.java, Int::class.java, String::class.java, Int::class.java,)
+                            readList.add(clazz.getConstructor(Int::class.java, Int::class.java, String::class.java, Int::class.java, String::class.java, String::class.java, Int::class.java,)
                                 .newInstance(
                                     cursor.getInt(0),
                                     cursor.getInt(1),
                                     cursor.getString(2),
                                     cursor.getInt(3),
                                     cursor.getString(4),
-                                    cursor.getInt(5),
+                                    cursor.getString(5),
+                                    cursor.getInt(6),
                                 ) as T
                             )
                         }

@@ -4,5 +4,6 @@ class Dday (val Dtime: Int,
             val Dday: Int,
             val product_name: String,
             val product_price: Int,
+            val product_memo: String,
             val place_name: String,
             val hourly: Int)

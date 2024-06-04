@@ -1,5 +1,6 @@
 package com.example.timeconversionapplication
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,39 +18,25 @@ class MyAdapter(private var dataSet: MutableList<Any>): RecyclerView.Adapter<Rec
     }
 
     inner class ProductViewHolder(val binding: ListProductBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(product: Product) {
-            binding.memo.text = product.memo
-            binding.productName.text = product.product_name
+        fun bind(dday: Dday) {
+            binding.memo.text = dday.product_memo
+            binding.productName.text = dday.product_name
+            binding.dday.text = dday.Dday.toString()
         }
     }
-
-//    inner class ProductViewHolder(val binding: ListProductBinding) : RecyclerView.ViewHolder(binding.root) {
-//        fun bind(product: Product, dday: Dday) {
-//            binding.memo.text = product.memo
-//            binding.productName.text = product.product_name
-//            binding.dday.text = dday.Dday.toString()
-//        }
-//    }
-
-//    inner class ProductViewHolder(val binding: ListProductBinding) : RecyclerView.ViewHolder(binding.root) {
-//        fun bind(data: Any) {
-//            if (data is Product && data.dday != null) {
-//                binding.memo.text = data.memo
-//                binding.productName.text = data.product_name
-//                binding.dday.text = data.dday.Dday.toString()
-//            }
-//        }
-//    }
 
     override fun getItemCount(): Int {
         return dataSet.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (dataSet[position]) {
+        return when (val item = dataSet[position]) {
             is WorkPlace -> VIEW_TYPE_PLACE
-            is Product -> VIEW_TYPE_PRODUCT
-            else -> throw IllegalArgumentException("Invalid data at position $position")
+            is Dday -> VIEW_TYPE_PRODUCT
+            else -> {
+                Log.e("MyAdapter", "Invalid data at position $position: ${item::class.java.simpleName}")
+                throw IllegalArgumentException("Invalid data at position $position")
+            }
         }
     }
 
@@ -75,28 +62,12 @@ class MyAdapter(private var dataSet: MutableList<Any>): RecyclerView.Adapter<Rec
             }
             VIEW_TYPE_PRODUCT -> {
                 val productHolder = holder as ProductViewHolder
-                val product = dataSet[position] as? Product ?: return
-                productHolder.bind(product)
+                val dday = dataSet[position] as? Dday ?: return
+                productHolder.bind(dday)
             }
             else -> throw IllegalArgumentException("Invalid view holder type")
         }
     }
-
-//    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        when (holder.itemViewType) {
-//            VIEW_TYPE_PLACE -> {
-//                val placeHolder = holder as PlaceViewHolder
-//                placeHolder.bind(dataSet[position] as WorkPlace)
-//            }
-//            VIEW_TYPE_PRODUCT -> {
-//                val productHolder = holder as ProductViewHolder
-//                val product = dataSet[position] as? Product ?: return
-//                val dday = dataSet[position] as? Dday ?: return
-//                productHolder.bind(product, dday)
-//            }
-//            else -> throw IllegalArgumentException("Invalid view holder type")
-//        }
-//    }
 
     fun setList(newList: MutableList<Any>) {
         this.dataSet = newList
