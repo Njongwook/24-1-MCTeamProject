@@ -86,8 +86,9 @@ class JobRegisDetailActivity : AppCompatActivity() {
 
             val date = "date"
             //date 입력 부분 구현 해야 함 > 직접 입력하게 할지, 캘린더 같은 부분에서 선택하게 할지....
+            val place_name = "placename"
 
-            val newElement = WorkTime(date, workTimeInMillis, breakTime.toString(), "placename", hourly)
+            val newElement = WorkTime(date, workTimeInMillis, breakTime.toString(), place_name, hourly)
 
             // 데이터베이스에 새로운 WorkTime 객체 삽입
             dbHelper.use {
