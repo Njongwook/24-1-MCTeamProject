@@ -24,31 +24,5 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragment_container, HomeFragment())
                 .commitNow()
         }
-//
-//        var db = dbHelper.writableDatabase
-//        Log.d("TAG", "START")
-//        val productArr = mutableListOf(
-//            Product("아이폰",1500000, "도전! 사과농장주")
-//        )
-//        val workplaceArr = mutableListOf(
-//            WorkPlace("버거킹",3,15,10000,1,1)
-//        )
-//        for (entry in productArr){
-//            val myentry = MyDatabase.MyDBContract.Product
-//            val products = ContentValues().apply{
-//                put(myentry.product_name, entry.product_name)
-//                put(myentry.price, entry.price)
-//                put(myentry.memo, entry.memo)
-//            }
-//            Log.d("TAG", "Products:$products")
-//
-//            try{
-//                val newRowId=db?.insertOrThrow(myentry.TABLE_NAME, null, products)
-//                Log.d("TAG", newRowId.toString())
-//            }
-//            catch(e: SQLiteConstraintException) {
-//                db?.update(myentry.TABLE_NAME, products, "${myentry.product_name} LIKE ?", arrayOf(entry.product_name))
-//            }
-//        }
     }
 }

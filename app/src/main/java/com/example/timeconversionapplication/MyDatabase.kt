@@ -22,6 +22,7 @@ class MyDatabase {
             const val break_time = "break_time"
             const val place_name = "place_name"
             const val hourly = "hourly"
+            const val wage = "wage"
         }
         object Product : BaseColumns{
             const val TABLE_NAME = "product"
@@ -54,6 +55,7 @@ class MyDatabase {
                     "${MyDBContract.WorkTime.break_time} TEXT," +
                     "${MyDBContract.WorkTime.place_name} TEXT," +
                     "${MyDBContract.WorkTime.hourly} INTEGER," +
+                    "${MyDBContract.WorkTime.wage} INTEGER," +
                     "CONSTRAINT PLACE_NAME_TIME_FK FOREIGN KEY (${MyDBContract.WorkTime.place_name})" +
                     "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.place_name})" +
                     "ON DELETE SET NULL);"
@@ -138,13 +140,14 @@ class MyDatabase {
                         }
                         WorkTime::class.java -> {
                             readList.add(clazz.getConstructor(
-                                String::class.java, String::class.java, String::class.java, String::class.java, Int::class.java
+                                String::class.java, String::class.java, String::class.java, String::class.java, Int::class.java, Int::class.java
                             ).newInstance(
                                 cursor.getString(0),
                                 cursor.getString(1),
                                 cursor.getString(2),
                                 cursor.getString(3),
-                                cursor.getInt(4)
+                                cursor.getInt(4),
+                                cursor.getInt(5)
                             ) as T)
                         }
                         Product::class.java -> {
@@ -178,5 +181,25 @@ class MyDatabase {
             return readList
         }
 
+        fun selectByDate(date: String): WorkTime? {
+            val db = readableDatabase
+            val cursor = db.rawQuery("SELECT * FROM ${MyDBContract.WorkTime.TABLE_NAME} WHERE ${MyDBContract.WorkTime.date} = ?", arrayOf(date))
+            var workTime: WorkTime? = null
+            with(cursor) {
+                if (moveToFirst()) {
+                    workTime = WorkTime(
+                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.date)),
+                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.work_time)),
+                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.break_time)),
+                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.place_name)),
+                        getInt(getColumnIndexOrThrow(MyDBContract.WorkTime.hourly)),
+                        getInt(getColumnIndexOrThrow(MyDBContract.WorkTime.wage))
+                    )
+                }
+            }
+            cursor.close()
+            db.close()
+            return workTime
+        }
     }
 }

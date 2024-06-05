@@ -29,7 +29,6 @@ class HomeFragment : Fragment() {
     private lateinit var dbHelper: MyDatabase.MyDBHelper
     private lateinit var adapter: MyAdapter
     private lateinit var adapter2: MyAdapter
-    private lateinit var adapter3: PlaceAdapter
 
 //    private var param1: String? = null
 //    private var param2: String? = null
@@ -91,6 +90,30 @@ class HomeFragment : Fragment() {
                 Log.d("TAG", newRowId.toString())
             } catch (e: SQLiteConstraintException) {
                 db.update(myentry.TABLE_NAME, ddays, "${myentry.product_name} LIKE ?", arrayOf(entry.product_name))
+            }
+        }
+
+        // SAMPLE : WorkTime 데이터 삽입
+        val worktimeArr = mutableListOf(
+            WorkTime("2024년 6월 5일", "10", "1", "버거킹", 10000, 50000)
+        )
+        for (entry in worktimeArr) {
+            val myentry = MyDatabase.MyDBContract.WorkTime
+            val times = ContentValues().apply {
+                put(myentry.date, entry.date)
+                put(myentry.work_time, entry.work_time)
+                put(myentry.break_time, entry.break_time)
+                put(myentry.place_name, entry.place_name)
+                put(myentry.hourly, entry.hourly)
+                put(myentry.wage, entry.wage)
+            }
+            Log.d("TAG", "work times:$times")
+
+            try {
+                val newRowId = db.insertOrThrow(myentry.TABLE_NAME, null, times)
+                Log.d("TAG", newRowId.toString())
+            } catch (e: SQLiteConstraintException) {
+                db.update(myentry.TABLE_NAME, times, "${myentry.date} LIKE ?", arrayOf(entry.date))
             }
         }
 
