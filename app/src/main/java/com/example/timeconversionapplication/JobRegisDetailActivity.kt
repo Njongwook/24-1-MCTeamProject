@@ -2,7 +2,9 @@ package com.example.timeconversionapplication
 
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -25,7 +27,124 @@ import kotlin.math.abs
 import kotlin.time.times
 
 class JobRegisDetailActivity : AppCompatActivity() {
+    private val dbHelper = MyDatabase.MyDBHelper(this)
+    private lateinit var binding: PartTimeJobRegisDetailsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 신유빈 코드 시작--------------------------------------------------------------------------------------------
+        binding = PartTimeJobRegisDetailsBinding.inflate(layoutInflater)
+        // super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setContentView(binding.root)
+
+        // WorkTime 타입의 데이터를 조회하여 MutableList<Any>로 변환 - db 연결에 필요
+        val getList: MutableList<Any> = dbHelper.selectAll("worktime", WorkTime::class.java).toMutableList()
+
+        // 가져온 데이터를 로그로 출력합니다. - 없어도 됨. 디버깅 용
+        for (e in getList) {
+            Log.d("TAG", e.toString())
+        }
+
+        // 어댑터에 데이터를 설정합니다. - db 연결에 필요
+        val adapter = MyAdapter(getList)
+
+
+        // 주석처리 한 부분 -> 시간 계산 코드 - 시작 시간, 종료 시간 받아와서 (종료시간 - 시작 시간)으로 일한 시간 구하기, string 값으로 변경해서 넣기
+        // 구현 하신 것 같아서 통채로 지워도 상관 없을 것 같습니다.
+
+//        val startTime = Calendar.getInstance()
+//        val endTime = Calendar.getInstance()
+//        var workTimeInMillis = ""
+//        binding.startTime.setOnTimeChangedListener { timePicker, hourOfDay, minute ->
+//            startTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
+//            startTime.set(Calendar.MINUTE, minute)
+//        }
+//
+//        binding.endTime.setOnTimeChangedListener{ timePicker, hourOfDay, minute ->
+//            endTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
+//            endTime.set(Calendar.MINUTE, minute)
+//
+//            // endTime이 startTime보다 이후인지 체크하는 부분
+//            if (endTime.timeInMillis < startTime.timeInMillis) {
+//                // 예외 처리 혹은 기본값 설정
+//                // 여기서는 endTime을 startTime과 동일하게 설정
+//                endTime.timeInMillis = startTime.timeInMillis
+//            }
+//
+//            // 작업 시간 계산 (milliseconds 단위)
+//            workTimeInMillis = (endTime.timeInMillis - startTime.timeInMillis).toString()
+//
+//            // 작업 시간을 시간 단위로 변환
+////            val hours = workTimeInMillis / (1000 * 60 * 60) // milliseconds -> hours
+////            val minutes = (workTimeInMillis % (1000 * 60 * 60)) / (1000 * 60) // milliseconds -> minutes
+////
+////            // 작업 시간 출력 예시
+////            Log.d("WorkTime", "Work time: $hours hours $minutes minutes")
+//        }
+
+        var breakTime = 0
+        var hourly = 0
+
+        // 저장 버튼 클릭시
+        binding.save.setOnClickListener {
+            // input 창에서 시급 받아오기
+            val hourlyText = binding.salary.text.toString()
+            // input 창에서 쉬는 시간  받아오기
+            val breakTimeText = binding.breakTime.text.toString()
+
+            // 쉬는 시간이 숫자인지 검사
+            try {
+                breakTime = breakTimeText.toInt()
+
+            } catch (e: NumberFormatException) {
+                Log.d("TAG", "Break time must be a number  Provided: '$breakTimeText'")
+                return@setOnClickListener
+            }
+            // 시급이 숫자인지 검사
+            try {
+                hourly = breakTimeText.toInt()
+
+            } catch (e: NumberFormatException) {
+                Log.d("TAG", "hourly must be a number  Provided: '$hourlyText'")
+                return@setOnClickListener
+            }
+
+            // date, 장소 이름으로 샘플 값으로 스트링 넣었습니다.
+            val date = "date"
+            val place_name = "placename" // 장소 이름 받아서 넣는 것 구현 하는 중이었습니다.
+
+            // 화면에서 받은 값 들로 새 WorkTime 값 생성 - db 연결에 필요
+            // 순서 대로 날짜, 일한 시간, 쉬는 시간, 근무지명, 시급입니다.
+            // 위에 일한 시간 구하는 부분 주석 처리 해두어서 빨갛게 뜹니다.
+            val newElement = WorkTime(date, workTimeInMillis, breakTime.toString(), place_name, hourly)
+
+            // 데이터베이스에 새로운 WorkTime 객체 삽입 - db 연결에 필요
+            dbHelper.use {
+                // db 불러오기
+                val db = dbHelper.writableDatabase
+                // 값 넣기
+                val values = ContentValues().apply {
+                    put("date", date)
+                    put("work_time", workTimeInMillis)
+                    put("break_time", breakTime.toString())
+                    put("place_name", place_name)
+                    put("hourly", hourly)
+                }
+                //삽입
+                db.insert("worktime", null, values)
+            }
+
+            // 아답터에 해당 값 추가 - db 연결에 필요
+            adapter.addItem(newElement)
+
+            // 디버깅 용 - 없어도 됨
+            Log.d("TAG", newElement.toString())
+
+
+            // 홈 화면으로 돌아가기
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        // 신유빈 코드 종료--------------------------------------------------------------------------------------------
 
         val binding = PartTimeJobRegisDetailsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
