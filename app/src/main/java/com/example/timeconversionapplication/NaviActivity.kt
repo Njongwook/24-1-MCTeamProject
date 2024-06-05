@@ -1,5 +1,7 @@
 package com.example.timeconversionapplication
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,7 +12,7 @@ private const val TAG_HOME = "home_fragment"
 private const val TAG_PRODUCT = "product_fragment"
 private const val TAG_CALENDAR = "calendar_fragment"
 private const val TAG_TIPS = "tips_fragment"
-
+private const val REQUEST_CODE_JOB_REGIS = 1
 class NaviActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNaviBinding
 
@@ -65,5 +67,12 @@ class NaviActivity : AppCompatActivity() {
         }
 
         fragTransaction.commitAllowingStateLoss()
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_JOB_REGIS && resultCode == Activity.RESULT_OK) {
+            setFragment(TAG_HOME, HomeFragment.newInstance())
+            binding.navigationView.selectedItemId = R.id.homeFragment // 홈 프래그먼트 선택
+        }
     }
 }
