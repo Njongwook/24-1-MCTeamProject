@@ -14,7 +14,9 @@ import org.json.JSONObject
 
 class ProductDialogFragment : DialogFragment() {
 
+
     interface OnProductSelectedListener {
+
         fun onProductSelected(name: String, price: String)
     }
 

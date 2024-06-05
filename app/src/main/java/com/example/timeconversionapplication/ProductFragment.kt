@@ -1,12 +1,21 @@
 package com.example.timeconversionapplication
 
+import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.FragmentManager
 import com.example.timeconversionapplication.databinding.FragmentProductBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,12 +30,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListener {
-
+    private lateinit var dbHelper: MyDatabase.MyDBHelper
     private lateinit var binding: FragmentProductBinding
     private var param1: String? = null
     private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        dbHelper = MyDatabase.MyDBHelper(requireContext())
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -39,6 +49,13 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProductBinding.inflate(inflater, container, false)
+        // Fragment 외부의 View에 대해 터치 이벤트를 감지하여 포커스를 잃으면 키보드를 숨김
+        binding.root.viewTreeObserver.addOnGlobalFocusChangeListener { _, newFocus ->
+            if (newFocus !is EditText) {
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+            }
+        }
         binding.findPrice.apply {
             setOnClickListener {
                 val productName = binding.productName.text.toString()
@@ -80,16 +97,47 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
 
         binding.productSave.apply {
             setOnClickListener {
-                val name = binding.productName.text
-                val price = binding.productPrice.text
-                val memo = binding.memo.text
+                val name = binding.productName.text.toString()
+                val priceText = binding.productPrice.text.toString()
+                var memo = binding.memo.text.toString()
 
-                // TODO: DB에 상품명, 가격, 메모 저장한 연결해주면됩니다.
-                Toast.makeText(context, "${name}:${price}, ${memo}", Toast.LENGTH_SHORT).show()
+                if (name.isBlank() || priceText.isBlank()){
+                    Log.d("TAG", "All fields must be filled out")
+                    Toast.makeText(context,"All fields must be filled out", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (memo.isBlank()){
+                    memo = ""
+                }
 
+                val price = priceText.toInt()
+
+                val newElement = Product(name, price, memo)
+
+                // 데이터베이스에 새로운 WorkPlace 객체 삽입 - db 연결에 필요
+                dbHelper.use {
+                    val db = dbHelper.writableDatabase
+                    val values = ContentValues().apply {
+                        put("product_name", name)
+                        put("price", price)
+                        put("memo", memo)
+                    }
+
+                    db.insert("product", null, values)
+                }
+
+                Log.d("TAG", newElement.toString())
+
+                binding.productName.setText("")
+                binding.productPrice.setText("")
+                binding.memo.setText("")
+
+                val imm: InputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
             }
         }
         return binding.root
+
     }
 
     override fun onProductSelected(name: String, price: String) {
@@ -129,6 +177,7 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
             responseBody.toString()
         }
     }
+
 
     companion object {
         private const val ARG_PARAM1 = "param1"
