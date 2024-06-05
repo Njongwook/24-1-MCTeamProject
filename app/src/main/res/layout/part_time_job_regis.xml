@@ -68,7 +68,10 @@
         <EditText
             android:id="@+id/days"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:hint="일"
+            android:inputType="number"/>
     </LinearLayout>
 
     <LinearLayout
@@ -81,15 +84,64 @@
             android:layout_height="wrap_content"
             android:text="세금 및 사대보험"
             android:textSize="20sp"/>
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="세금"
-            android:textSize="20sp"/>
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/taxText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="세금"
+                android:textSize="20sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+                <CheckBox
+                    android:id="@+id/taxCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/taxSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/tax"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:enabled="false"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/insuranceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사대보험"
+                android:textSize="20sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+                <CheckBox
+                    android:id="@+id/insuranceCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/insuranceSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/insurance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"/>
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
