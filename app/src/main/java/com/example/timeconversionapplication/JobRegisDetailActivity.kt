@@ -80,70 +80,70 @@ class JobRegisDetailActivity : AppCompatActivity() {
 ////            // 작업 시간 출력 예시
 ////            Log.d("WorkTime", "Work time: $hours hours $minutes minutes")
 //        }
-
-        var breakTime = 0
-        var hourly = 0
-
-        // 저장 버튼 클릭시
-        binding.save.setOnClickListener {
-            // input 창에서 시급 받아오기
-            val hourlyText = binding.salary.text.toString()
-            // input 창에서 쉬는 시간  받아오기
-            val breakTimeText = binding.breakTime.text.toString()
-
-            // 쉬는 시간이 숫자인지 검사
-            try {
-                breakTime = breakTimeText.toInt()
-
-            } catch (e: NumberFormatException) {
-                Log.d("TAG", "Break time must be a number  Provided: '$breakTimeText'")
-                return@setOnClickListener
-            }
-            // 시급이 숫자인지 검사
-            try {
-                hourly = breakTimeText.toInt()
-
-            } catch (e: NumberFormatException) {
-                Log.d("TAG", "hourly must be a number  Provided: '$hourlyText'")
-                return@setOnClickListener
-            }
-
-            // date, 장소 이름으로 샘플 값으로 스트링 넣었습니다.
-            val date = "date"
-            val place_name = "placename" // 장소 이름 받아서 넣는 것 구현 하는 중이었습니다.
-
-            // 화면에서 받은 값 들로 새 WorkTime 값 생성 - db 연결에 필요
-            // 순서 대로 날짜, 일한 시간, 쉬는 시간, 근무지명, 시급입니다.
-            // 위에 일한 시간 구하는 부분 주석 처리 해두어서 빨갛게 뜹니다.
-            val newElement = WorkTime(date, workTimeInMillis, breakTime.toString(), place_name, hourly)
-
-            // 데이터베이스에 새로운 WorkTime 객체 삽입 - db 연결에 필요
-            dbHelper.use {
-                // db 불러오기
-                val db = dbHelper.writableDatabase
-                // 값 넣기
-                val values = ContentValues().apply {
-                    put("date", date)
-                    put("work_time", workTimeInMillis)
-                    put("break_time", breakTime.toString())
-                    put("place_name", place_name)
-                    put("hourly", hourly)
-                }
-                //삽입
-                db.insert("worktime", null, values)
-            }
-
-            // 아답터에 해당 값 추가 - db 연결에 필요
-            adapter.addItem(newElement)
-
-            // 디버깅 용 - 없어도 됨
-            Log.d("TAG", newElement.toString())
-
-
-            // 홈 화면으로 돌아가기
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
+//
+//        var breakTime = 0
+//        var hourly = 0
+//
+//        // 저장 버튼 클릭시
+//        binding.save.setOnClickListener {
+//            // input 창에서 시급 받아오기
+//            val hourlyText = binding.salary.text.toString()
+//            // input 창에서 쉬는 시간  받아오기
+//            val breakTimeText = binding.breakTime.text.toString()
+//
+//            // 쉬는 시간이 숫자인지 검사
+//            try {
+//                breakTime = breakTimeText.toInt()
+//
+//            } catch (e: NumberFormatException) {
+//                Log.d("TAG", "Break time must be a number  Provided: '$breakTimeText'")
+//                return@setOnClickListener
+//            }
+//            // 시급이 숫자인지 검사
+//            try {
+//                hourly = breakTimeText.toInt()
+//
+//            } catch (e: NumberFormatException) {
+//                Log.d("TAG", "hourly must be a number  Provided: '$hourlyText'")
+//                return@setOnClickListener
+//            }
+//
+//            // date, 장소 이름으로 샘플 값으로 스트링 넣었습니다.
+//            val date = "date"
+//            val place_name = "placename" // 장소 이름 받아서 넣는 것 구현 하는 중이었습니다.
+//
+//            // 화면에서 받은 값 들로 새 WorkTime 값 생성 - db 연결에 필요
+//            // 순서 대로 날짜, 일한 시간, 쉬는 시간, 근무지명, 시급입니다.
+//            // 위에 일한 시간 구하는 부분 주석 처리 해두어서 빨갛게 뜹니다.
+//            val newElement = WorkTime(date, workTimeInMillis, breakTime.toString(), place_name, hourly)
+//
+//            // 데이터베이스에 새로운 WorkTime 객체 삽입 - db 연결에 필요
+//            dbHelper.use {
+//                // db 불러오기
+//                val db = dbHelper.writableDatabase
+//                // 값 넣기
+//                val values = ContentValues().apply {
+//                    put("date", date)
+//                    put("work_time", workTimeInMillis)
+//                    put("break_time", breakTime.toString())
+//                    put("place_name", place_name)
+//                    put("hourly", hourly)
+//                }
+//                //삽입
+//                db.insert("worktime", null, values)
+//            }
+//
+//            // 아답터에 해당 값 추가 - db 연결에 필요
+//            adapter.addItem(newElement)
+//
+//            // 디버깅 용 - 없어도 됨
+//            Log.d("TAG", newElement.toString())
+//
+//
+//            // 홈 화면으로 돌아가기
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//        }
         // 신유빈 코드 종료--------------------------------------------------------------------------------------------
 
         val binding = PartTimeJobRegisDetailsBinding.inflate(layoutInflater)

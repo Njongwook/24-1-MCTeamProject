@@ -7,4 +7,5 @@ class WorkTime (val date: String,
                 val work_time: String,
                 val break_time: String,
                 val place_name: String,
-                val hourly: Int)
+                val hourly: Int,
+                val wage: Int)
