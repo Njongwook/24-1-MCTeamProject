@@ -13,9 +13,7 @@ class MyDatabase {
             const val place_name = "place_name"
             const val salary_style = "salary_style"
             const val salary_day = "salary_day"
-            const val hourly = "hourly"
             const val tax = "tax"
-            const val insurance = "insurance"
         }
         object WorkTime : BaseColumns{
             const val TABLE_NAME = "worktime"
@@ -48,9 +46,7 @@ class MyDatabase {
                     "${MyDBContract.WorkPlace.place_name} TEXT PRIMARY KEY," +
                     "${MyDBContract.WorkPlace.salary_style} INTEGER," +
                     "${MyDBContract.WorkPlace.salary_day} INTEGER," +
-                    "${MyDBContract.WorkPlace.hourly} INTEGER," +
-                    "${MyDBContract.WorkPlace.tax} INTEGER," +
-                    "${MyDBContract.WorkPlace.insurance} INTEGER);"
+                    "${MyDBContract.WorkPlace.tax} INTEGER);"
         val SQL_CREATE_WORK_TIME_ENTRIES =
             "CREATE TABLE ${MyDBContract.WorkTime.TABLE_NAME}(" +
                     "${MyDBContract.WorkTime.date} TEXT PRIMARY KEY," +
@@ -60,9 +56,6 @@ class MyDatabase {
                     "${MyDBContract.WorkTime.hourly} INTEGER," +
                     "CONSTRAINT PLACE_NAME_TIME_FK FOREIGN KEY (${MyDBContract.WorkTime.place_name})" +
                     "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.place_name})" +
-                    "ON DELETE SET NULL," +
-                    "CONSTRAINT HOURLY_TIME_FK FOREIGN KEY (${MyDBContract.WorkTime.hourly})" +
-                    "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.hourly})" +
                     "ON DELETE SET NULL);"
         val SQL_CREATE_PRODUCT_ENTRIES =
             "CREATE TABLE ${MyDBContract.Product.TABLE_NAME}(" +
@@ -92,7 +85,7 @@ class MyDatabase {
                     "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.place_name})" +
                     "ON DELETE SET NULL," +
                     "CONSTRAINT HOURLY_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.hourly})" +
-                    "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.hourly})" +
+                    "REFERENCES ${MyDBContract.WorkTime.TABLE_NAME} (${MyDBContract.WorkTime.hourly})" +
                     "ON DELETE SET NULL);"
 
         val SQL_DELETE_WORK_PLACE_ENTRIES =
@@ -124,59 +117,57 @@ class MyDatabase {
             const val DATABASE_NAME = "myDBfile.db"
         }
 
-        fun <T> selectAll(tableName: String, clazz: Class<T>) : MutableList<T>{
+        fun <T> selectAll(tableName: String, clazz: Class<T>): MutableList<T> {
             val readList = mutableListOf<T>()
-            val db= readableDatabase
+            val db = readableDatabase
             val cursor = db.rawQuery("SELECT * FROM $tableName;", null)
-            Log.d("TAG", "Select All Query: " + "SELECT * FROM $tableName;")
+            Log.d("TAG", "Select All Query: SELECT * FROM $tableName;")
             Log.d("TAG", cursor.toString())
             with(cursor) {
                 while (moveToNext()) {
                     when (clazz) {
                         WorkPlace::class.java -> {
-                            readList.add(clazz.getConstructor(String::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java)
-                                .newInstance(
-                                    cursor.getString(0),
-                                    cursor.getInt(1),
-                                    cursor.getInt(2),
-                                    cursor.getInt(3),
-                                    cursor.getInt(4),
-                                    cursor.getInt(5)
-                                ) as T
-                            )
+                            readList.add(clazz.getConstructor(
+                                String::class.java, Int::class.java, Int::class.java, Int::class.java
+                            ).newInstance(
+                                cursor.getString(0),
+                                cursor.getInt(1),
+                                cursor.getInt(2),
+                                cursor.getInt(3),
+                            ) as T)
                         }
                         WorkTime::class.java -> {
-                            readList.add(clazz.getConstructor(String::class.java, String::class.java, String::class.java, String::class.java, Int::class.java)
-                                .newInstance(
-                                    cursor.getString(0),
-                                    cursor.getString(1),
-                                    cursor.getString(2),
-                                    cursor.getString(3),
-                                    cursor.getInt(4)
-                                ) as T
-                            )
+                            readList.add(clazz.getConstructor(
+                                String::class.java, String::class.java, String::class.java, String::class.java, Int::class.java
+                            ).newInstance(
+                                cursor.getString(0),
+                                cursor.getString(1),
+                                cursor.getString(2),
+                                cursor.getString(3),
+                                cursor.getInt(4)
+                            ) as T)
                         }
                         Product::class.java -> {
-                            readList.add(clazz.getConstructor(String::class.java, Int::class.java, String::class.java,)
-                                .newInstance(
-                                    cursor.getString(0),
-                                    cursor.getInt(1),
-                                    cursor.getString(2),
-                                ) as T
-                            )
+                            readList.add(clazz.getConstructor(
+                                String::class.java, Int::class.java, String::class.java
+                            ).newInstance(
+                                cursor.getString(0),
+                                cursor.getInt(1),
+                                cursor.getString(2)
+                            ) as T)
                         }
                         Dday::class.java -> {
-                            readList.add(clazz.getConstructor(Int::class.java, Int::class.java, String::class.java, Int::class.java, String::class.java, String::class.java, Int::class.java,)
-                                .newInstance(
-                                    cursor.getInt(0),
-                                    cursor.getInt(1),
-                                    cursor.getString(2),
-                                    cursor.getInt(3),
-                                    cursor.getString(4),
-                                    cursor.getString(5),
-                                    cursor.getInt(6),
-                                ) as T
-                            )
+                            readList.add(clazz.getConstructor(
+                                Int::class.java, Int::class.java, String::class.java, Int::class.java, String::class.java, String::class.java, Int::class.java
+                            ).newInstance(
+                                cursor.getInt(0),
+                                cursor.getInt(1),
+                                cursor.getString(2),
+                                cursor.getInt(3),
+                                cursor.getString(4),
+                                cursor.getString(5),
+                                cursor.getInt(6)
+                            ) as T)
                         }
                         else -> throw IllegalArgumentException("Unknown class type")
                     }
@@ -186,5 +177,6 @@ class MyDatabase {
             db.close()
             return readList
         }
+
     }
 }

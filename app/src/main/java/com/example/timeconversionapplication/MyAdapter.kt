@@ -2,6 +2,7 @@ package com.example.timeconversionapplication
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.timeconversionapplication.databinding.ListPlaceBinding
@@ -10,6 +11,8 @@ import com.example.timeconversionapplication.databinding.ListProductBinding
 class MyAdapter(private var dataSet: MutableList<Any>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_PLACE = 1
     private val VIEW_TYPE_PRODUCT = 2
+    private lateinit var itemClickListener : OnItemClickListener
+
 
     inner class PlaceViewHolder(val binding: ListPlaceBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(place: WorkPlace) {
@@ -72,5 +75,22 @@ class MyAdapter(private var dataSet: MutableList<Any>): RecyclerView.Adapter<Rec
     fun setList(newList: MutableList<Any>) {
         this.dataSet = newList
         notifyDataSetChanged()
+    }
+
+    fun getElement(pos:Int): Any {
+        return dataSet[pos]
+    }
+
+    fun addItem(item: Any){
+        dataSet.add(item)
+        this.notifyItemInserted(dataSet.size-1)
+    }
+
+    interface OnItemClickListener {
+        fun onClick(v: View, position: Int)
+    }
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener){
+        this.itemClickListener = onItemClickListener
     }
 }
