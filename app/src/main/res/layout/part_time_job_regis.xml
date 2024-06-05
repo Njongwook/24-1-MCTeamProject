@@ -14,7 +14,8 @@
     <EditText
         android:id="@+id/part_time_job_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:hint="명지 카페"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,47 +32,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <androidx.appcompat.widget.AppCompatButton
+            <android.widget.Button
                 android:id="@+id/day_salary"
-                android:text="일급"
+                android:text="당일"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:background="@color/blue3"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:layout_margin="5dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/week_salary"
-                android:text="주급"
+                android:text="일주일"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:background="@color/blue3"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:layout_margin="5dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/month_salary"
-                android:text="월급"
+                android:text="한 달 동안"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:background="@color/blue3"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:layout_margin="5dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:text="근무한 돈을"
+                android:textSize="15dp"
+                android:gravity="center|right"/>
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/days"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:hint="일"
-            android:inputType="number"/>
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/days"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:inputType="number"
+                android:gravity="center"
+                android:hint="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                android:text="일에 받아요"
+                android:textSize="15dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -79,11 +100,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="세금 및 사대보험"
-            android:textSize="20sp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,36 +128,8 @@
             android:id="@+id/tax"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="false"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/insuranceText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="사대보험"
-                android:textSize="20sp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right">
-                <CheckBox
-                    android:id="@+id/insuranceCheck"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </LinearLayout>
-        <Spinner
-            android:id="@+id/insuranceSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/insurance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:inputType="numberDecimal"/>
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton

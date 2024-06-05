@@ -148,6 +148,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.addWorkPlace.setOnClickListener {
             val intent = Intent(activity, JobRegisActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             startActivity(intent)
         }
 
@@ -187,5 +188,6 @@ class HomeFragment : Fragment() {
 //                    putString(ARG_PARAM2, param2)
                 }
             }
+        fun newInstance() = HomeFragment()
     }
 }

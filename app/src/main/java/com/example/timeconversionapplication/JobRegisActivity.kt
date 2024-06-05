@@ -31,7 +31,11 @@ class JobRegisActivity : AppCompatActivity() {
         binding = PartTimeJobRegisBinding.inflate(layoutInflater)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(binding.root)
-
+        val getList: MutableList<Any> = dbHelper.selectAll("workplace", WorkPlace::class.java).toMutableList()
+        for (e in getList) {
+            Log.d("TAG", e.toString())
+        }
+        val adapter = MyAdapter(getList)
         // 신유빈 코드 시작 --------------------------------------------------------------------------------------------
 //        // WorkPlace 타입의 데이터를 조회하여 MutableList<Any>로 변환 - db 연결에 필요
 //        val getList: MutableList<Any> = dbHelper.selectAll("workplace", WorkPlace::class.java).toMutableList()
@@ -45,11 +49,8 @@ class JobRegisActivity : AppCompatActivity() {
 //        val adapter = MyAdapter(getList)
 
         // 신유빈 코드 종료 --------------------------------------------------------------------------------------------
-        binding = PartTimeJobRegisBinding.inflate(layoutInflater)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setContentView(binding.root)
 
-        var salaryStyle = 3
+        var salaryStyle = 0
         binding.daySalary.setOnClickListener{
             salaryStyle = 1
             binding.daySalary.setBackgroundColor(ContextCompat.getColor(this,R.color.blue4))
@@ -75,52 +76,32 @@ class JobRegisActivity : AppCompatActivity() {
 
         binding.taxText.isEnabled = false
         binding.taxSpinner.isEnabled = false
-        var taxStyle = 0
+
+        var taxStyle = 0.0
+
         binding.taxCheck.setOnCheckedChangeListener { _, isChecked ->
             binding.taxSpinner.isEnabled = isChecked
             if (!isChecked) {
                 binding.taxText.isEnabled = false
+                binding.tax.isEnabled = false
+                taxStyle = 0.0 // 체크되지 않은 경우 taxStyle을 0.0으로 고정
             } else {
-                taxStyle = 1
                 binding.taxText.isEnabled = true
+                taxStyle = 1.0
             }
         }
-
         binding.taxSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == 1) { // '직접입력'이 선택된 경우
-                    binding.tax.isEnabled = true
+                if (binding.taxCheck.isChecked) {
+                    if (position == 0) {
+                        binding.tax.isEnabled = false
+                        taxStyle = 1.0
+                    } else {
+                        binding.tax.isEnabled = true
+                        taxStyle = 2.0
+                    }
                 } else {
-                    binding.tax.isEnabled = false
-                    taxStyle = 1
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // 아무것도 선택되지 않았을 때의 동작 (필요한 경우 구현)
-            }
-        }
-
-        binding.insuranceText.isEnabled = false
-        binding.insuranceSpinner.isEnabled = false
-        var insuranceStyle = 1
-        binding.insuranceCheck.setOnCheckedChangeListener { _, isChecked ->
-            binding.insuranceSpinner.isEnabled = isChecked
-            if (!isChecked) {
-                binding.insuranceText.isEnabled = false
-            } else {
-                insuranceStyle = 1
-                binding.insuranceText.isEnabled = true
-            }
-        }
-
-        binding.insuranceSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == 1) { // '직접입력'이 선택된 경우
-                    binding.insurance.isEnabled = true
-                } else {
-                    binding.insurance.isEnabled = false
-                    insuranceStyle = 1
+                    taxStyle = 0.0 // taxCheck가 체크되지 않은 경우 taxStyle을 0.0으로 고정
                 }
             }
 
@@ -130,7 +111,6 @@ class JobRegisActivity : AppCompatActivity() {
         }
 
         val taxSpinner : Spinner = binding.taxSpinner
-        val insuranceSpinner: Spinner = binding.insuranceSpinner // 스피너 참조 추가
 
         val taxAdpter = ArrayAdapter.createFromResource(this, R.array.tax_array, android.R.layout.simple_spinner_item)
         taxAdpter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -138,25 +118,60 @@ class JobRegisActivity : AppCompatActivity() {
 
         val insuranceAdapter = ArrayAdapter.createFromResource(this, R.array.insurance_array, android.R.layout.simple_spinner_item)
         insuranceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        insuranceSpinner.adapter = insuranceAdapter
 
 
         binding.next.setOnClickListener {
-            val input = binding.days.text.toString()
-            val number = input.toIntOrNull()
-            if (number != null) {
-                if (number > 31 || number < 1) {
-                    Toast.makeText(this, "1부터 31까지의 숫자만 입력하세요.", Toast.LENGTH_SHORT).show()
-                } else {
-                    intent.putExtra("tax",taxStyle)
-                    intent.putExtra("insurance",insuranceStyle)
-                    val intent = Intent(this, JobRegisDetailActivity::class.java)
-                    startActivity(intent)
+            // input 창에서 근무지명 받아오기
+            val placeName = binding.partTimeJobName.text.toString()
+            // input 창에서 월급일 받아오기
+            val day = binding.days.text.toString()
+            val salaryDayText = day.toIntOrNull()
+            // 안 넣은 값 있는지 검사
+            // 위에서 주석 처리 한 부분에서 salaryStyle 디폴트 값을 0으로 설정 했어서 검사도 0인지 알아봄
+            if (salaryDayText != null && placeName.isNotEmpty() && salaryStyle != 0){
+                val salaryDay = salaryDayText ?: 0 // null이면 기본값 0으로 설정
+
+                // 화면에서 받은 값 들로 새 WorkPlace 값 생성 - db 연결에 필요
+                // tax는 일단 0으로 설정
+                val newElement = WorkPlace(placeName, salaryStyle, salaryDay, 0)
+
+                // 데이터베이스에 새로운 WorkPlace 객체 삽입 - db 연결에 필요
+                dbHelper.use {
+                    val db = dbHelper.writableDatabase
+                    val values = ContentValues().apply {
+                        put("place_name", placeName)
+                        put("salary_style", salaryStyle)
+                        put("salary_day", salaryDay)
+                        put("tax", if(taxStyle == 2.0) binding.tax.text.toString().toDoubleOrNull() ?: 0.0 else 3.3)
+                    }
+                    // db에 삽입
+                    db.insert("workplace", null, values)
                 }
+
+
+                // 아답터에 값 넣기 - db 연결에 필요
+                adapter.addItem(newElement)
+
+                // 디버그 용 - 없어도 됨
+                Log.d("TAG", newElement.toString())
+
+                // 다음 화면(JobRegisDetail)으로 넘어가기
+                val intent = Intent(this, JobRegisDetailActivity::class.java)
+                intent.putExtra("place_name",placeName)
+                intent.putExtra("salary_style",salaryStyle)
+                intent.putExtra("salary_day",day)
+                intent.putExtra("tax", if(taxStyle == 2.0) binding.tax.text.toString().toDoubleOrNull() ?: 0.0 else 3.3)
+                startActivity(intent)
+
+                //super.onCreate(savedInstanceState)
             } else {
-                Toast.makeText(this, "유효한 숫자를 입력하세요.", Toast.LENGTH_SHORT).show()
+                Log.d("TAG", "All fields must be filled out")
+                Log.d("TAG", placeName)
+                Log.d("TAG", salaryStyle.toString())
+                return@setOnClickListener
             }
         }
+    }
 
         // 신유빈 코드 시작 --------------------------------------------------------------------------------------------
 ////        // 버튼 누르는 것에 따라 일급, 주급, 월급 구분
@@ -228,7 +243,8 @@ class JobRegisActivity : AppCompatActivity() {
 //            //super.onCreate(savedInstanceState)
 //        }
         // 신유빈 코드 종료 --------------------------------------------------------------------------------------------
-    }
+
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()

@@ -16,12 +16,22 @@ class MainActivity : AppCompatActivity() {
     private val dbHelper = MyDatabase.MyDBHelper(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding:ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomeFragment())
+                .replace(R.id.fragment_container, HomeFragment.newInstance())
+                .commitNow()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment !is HomeFragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment.newInstance())
                 .commitNow()
         }
     }
