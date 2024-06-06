@@ -48,10 +48,14 @@ class CalendarFragment : Fragment() {
         // 날짜가 변경될 때 day 값 업데이트 및 DB에서 데이터 조회
         var day = ""
         binding.calenderView.setOnDateChangeListener { calendarView, year, month, dayOfMonth ->
+            binding.month.text = (month+1).toString()
+            binding.day.text = dayOfMonth.toString()
+
+            // 해당 날짜에 일한 정보 있으면 db에서 찾아와서 일급 넣기
             day = "${year}년 ${month+1}월 ${dayOfMonth}일"
             val workTime = dbHelper.selectByDate(day)
             if (workTime != null) {
-                Log.d("TAG", "찾았다!")
+                binding.wage.text = workTime.wage.toString()
             }
         }
 
