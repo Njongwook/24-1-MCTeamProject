@@ -122,10 +122,8 @@ class JobRegisActivity : AppCompatActivity() {
 
 
         binding.next.setOnClickListener {
-            // input 창에서 근무지명 받아오기
-            val placeName = binding.partTimeJobName.text.toString()
-            // input 창에서 월급일 받아오기
             val day = binding.days.text.toString()
+            val placeName = binding.partTimeJobName.text.toString()
             val salaryDayText = day.toIntOrNull()
             // 안 넣은 값 있는지 검사
             // 위에서 주석 처리 한 부분에서 salaryStyle 디폴트 값을 0으로 설정 했어서 검사도 0인지 알아봄
@@ -143,7 +141,11 @@ class JobRegisActivity : AppCompatActivity() {
                         put("place_name", placeName)
                         put("salary_style", salaryStyle)
                         put("salary_day", salaryDay)
-                        put("tax", if(taxStyle == 2.0) binding.tax.text.toString().toDoubleOrNull() ?: 0.0 else 3.3)
+                        put("tax", when (taxStyle) {
+                            2.0 -> binding.tax.text.toString().toDoubleOrNull() ?: 0.0
+                            1.0 -> 3.3
+                            else -> 0.0
+                        })
                     }
                     // db에 삽입
                     db.insert("workplace", null, values)
@@ -161,9 +163,11 @@ class JobRegisActivity : AppCompatActivity() {
                 // 다음 화면(JobRegisDetail)으로 넘어가기
                 val intent = Intent(this, JobRegisDetailActivity::class.java)
                 intent.putExtra("place_name",placeName)
-//                intent.putExtra("salary_style",salaryStyle)
-//                intent.putExtra("salary_day",day)
-                intent.putExtra("tax", if(taxStyle == 2.0) binding.tax.text.toString().toDoubleOrNull() ?: 0.0 else 3.3)
+                intent.putExtra("tax", when (taxStyle) {
+                    2.0 -> binding.tax.text.toString().toDoubleOrNull() ?: 0.0
+                    1.0 -> 3.3
+                    else -> 0.0
+                })
                 startActivity(intent)
 
                 //super.onCreate(savedInstanceState)
@@ -171,8 +175,9 @@ class JobRegisActivity : AppCompatActivity() {
                 Log.d("TAG", "All fields must be filled out")
                 Log.d("TAG", placeName)
                 Log.d("TAG", salaryStyle.toString())
-                Log.d("TAG", day.toString())
+                Log.d("TAG", day)
                 Log.d("TAG", taxStyle.toString())
+                Toast.makeText(this, "모든 값을 전부 입력하세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
         }

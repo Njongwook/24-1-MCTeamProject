@@ -41,10 +41,6 @@ class JobRegisDetailActivity : AppCompatActivity() {
 //        val salary_style = intent.getIntExtra("salary_style", 0)
 //        val sal_day = intent.getStringExtra("salary_day") ?: ""
         val tax = intent.getDoubleExtra("tax", 0.0)
-        /*binding.taxexample.text = tax.toString()
-        binding.nameexample.text = place_name.toString()
-        binding.styleexample.text = salary_style.toString()
-        binding.dayexample.text = sal_day.toString()*/
 
 
         // WorkTime 타입의 데이터를 조회하여 MutableList<Any>로 변환 - db 연결에 필요
@@ -260,30 +256,40 @@ class JobRegisDetailActivity : AppCompatActivity() {
             dateRangePicker.addOnPositiveButtonClickListener { selection: Pair<Long, Long>? ->
                 val calendar = Calendar.getInstance()
 
+                // 내부적으로 "yyyyMMdd" 형식으로 사용할 포맷 설정
+                val internalFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+
+                // 시작 날짜 설정
                 calendar.timeInMillis = selection?.first ?: 0
-                startDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(calendar.time)
+                startDate = internalFormat.format(calendar.time)
                 Log.d("start", startDate)
 
+                // 종료 날짜 설정
                 calendar.timeInMillis = selection?.second ?: 0
-                endDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(calendar.time)
+                endDate = internalFormat.format(calendar.time)
                 Log.d("end", endDate)
 
-                binding.searchDate.text = dateRangePicker.headerText
+                // 시작 날짜와 종료 날짜 각각 다른 형식으로 표시
+                val startDisplayFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+                val endDisplayFormat = SimpleDateFormat("MM.dd", Locale.getDefault())
 
-                // Calculate the number of days between startDate and endDate
-                val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-                val start = dateFormat.parse(startDate)
-                val end = dateFormat.parse(endDate)
+                val startDisplayDate = startDisplayFormat.format(selection?.first ?: 0)
+                val endDisplayDate = endDisplayFormat.format(selection?.second ?: 0)
+                binding.searchDate.text = "$startDisplayDate - $endDisplayDate"
+
+                // 시작 날짜와 종료 날짜 사이의 일수 계산
+                val start = internalFormat.parse(startDate)
+                val end = internalFormat.parse(endDate)
 
                 val diffInMillis = end.time - start.time
                 val diffInDays = (diffInMillis / (1000 * 60 * 60 * 24)).toInt() + 1
 
                 Log.d("difference", diffInDays.toString())
 
-                // Display the difference in days
+                // 일수 차이를 표시
                 binding.daysDifference.text = "총 근무 일수: $diffInDays 일"
 
-                // Update the summary after calculating the difference in days
+                // 일수 계산 후 요약 업데이트
                 if (isUpdating) return@addOnPositiveButtonClickListener
                 isUpdating = true
                 updateSummary()
@@ -422,7 +428,7 @@ class JobRegisDetailActivity : AppCompatActivity() {
                     val wage = binding.totalIncome.text.toString().trim().toInt()
 
                     // Create the new WorkTime object
-                    val date = "date"
+                    val date = binding.searchDate.text.toString()
                     val newElement = WorkTime(date, workTimeInMinutes, breakTime.toString(), place_name, hourly, wage)
 
                     // Insert the new WorkTime object into the database
