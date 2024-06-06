@@ -1,5 +1,6 @@
 package com.example.timeconversionapplication
 
+import HomeFragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -64,6 +65,11 @@ class NaviActivity : AppCompatActivity() {
             fragTransaction.show(fragment)
         } else {
             fragTransaction.show(existingFragment)
+
+            // Refresh data if the fragment is HomeFragment
+            if (existingFragment is HomeFragment) {
+                existingFragment.refreshData()
+            }
         }
 
         fragTransaction.commitAllowingStateLoss()
