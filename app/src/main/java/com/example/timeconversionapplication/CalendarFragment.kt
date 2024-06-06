@@ -78,18 +78,20 @@ class CalendarFragment : Fragment() {
         // RecyclerView 설정 - recyclerView1은  일급, recyclerView2 는 디데이
         binding.recyclerView1.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView1.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
-        binding.recyclerView2.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView2.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+        //binding.recyclerView2.layoutManager = LinearLayoutManager(requireContext())
+        //binding.recyclerView2.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
 
         // 데이터베이스에서 WorkTime 데이터 가져오기
         val salaryList = dbHelper.selectAll(MyDatabase.MyDBContract.WorkTime.TABLE_NAME, WorkTime::class.java)
-        // 데이터베이스에서 Dday 데이터 가져오기
-        val ddayList = dbHelper.selectAll(MyDatabase.MyDBContract.Dday.TABLE_NAME, Dday::class.java)
+//        // 데이터베이스에서 Dday 데이터 가져오기
+//        val ddayList = dbHelper.selectAll(MyDatabase.MyDBContract.Dday.TABLE_NAME, Dday::class.java)
         // 어댑터 설정 및 RecyclerView에 어댑터 할당
         adapter = CalendarAdapter(salaryList as MutableList<Any>)
         binding.recyclerView1.adapter = adapter
-        adapter2 = CalendarAdapter(ddayList as MutableList<Any>)
-        binding.recyclerView2.adapter = adapter2
+        //adapter2 = CalendarAdapter(ddayList as MutableList<Any>)
+       // binding.recyclerView2.adapter = adapter2
+
+        binding.salary.text = adapter.getTotalSalary().toString()
 
 
         val toDayDeco = context?.let { ToDayDecorator(it) }
@@ -98,9 +100,7 @@ class CalendarFragment : Fragment() {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
 
-
-
-        val salaryDay = 15 //여기에 db에서 가져온 월급일 입력 15는 예시
+        val salaryDay = dbHelper.getSalaryDay()?: 0
         for (month in 1..12) {
             calendarList.add(CalendarDay.from(currentYear, month, salaryDay))
         }

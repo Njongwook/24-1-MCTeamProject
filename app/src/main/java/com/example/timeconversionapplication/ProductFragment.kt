@@ -133,7 +133,7 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
                 val Dday = 0
                 var salary = 0
 
-                // workTime의 wage 값 모두 더해서 salary 만들기
+                // workTime의 wage 값 모두 더해서 salary 만들기 (계산 할 때 필요하다면 쓰세요)
                 val db = dbHelper.readableDatabase
                 val cursor = db.rawQuery("SELECT wage FROM worktime", null)
 

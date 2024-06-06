@@ -166,25 +166,20 @@ class MyDatabase {
             return readList
         }
 
-        fun selectByDate(date: String): WorkTime? {
-            val db = readableDatabase
-            val cursor = db.rawQuery("SELECT * FROM ${MyDBContract.WorkTime.TABLE_NAME} WHERE ${MyDBContract.WorkTime.date} = ?", arrayOf(date))
-            var workTime: WorkTime? = null
-            with(cursor) {
-                if (moveToFirst()) {
-                    workTime = WorkTime(
-                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.date)),
-                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.work_time)),
-                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.break_time)),
-                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.place_name)),
-                        getInt(getColumnIndexOrThrow(MyDBContract.WorkTime.hourly)),
-                        getInt(getColumnIndexOrThrow(MyDBContract.WorkTime.wage))
-                    )
+        fun getSalaryDay(): Int? {
+            val db = this.readableDatabase
+            val cursor = db.query(
+                MyDatabase.MyDBContract.WorkPlace.TABLE_NAME,
+                arrayOf(MyDatabase.MyDBContract.WorkPlace.salary_day),
+                null, null, null, null, null
+            )
+
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    return it.getInt(it.getColumnIndexOrThrow(MyDatabase.MyDBContract.WorkPlace.salary_day))
                 }
             }
-            cursor.close()
-            db.close()
-            return workTime
+            return null
         }
     }
 }
