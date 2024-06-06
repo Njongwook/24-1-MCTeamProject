@@ -35,10 +35,8 @@ class MyDatabase {
             const val Dtime = "Dtime"
             const val Dday = "Dday"
             const val product_name = "product_name"
-            const val product_memo = "product_memo"
             const val product_price = "product_price"
-            const val place_name = "place_name"
-            const val hourly = "hourly"
+            const val salary = "salary"
         }
     }
     class MyDBHelper(context: Context) :SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
@@ -70,24 +68,13 @@ class MyDatabase {
                     "${MyDBContract.Dday.Dday} INTEGER," +
                     "${MyDBContract.Dday.product_name} TEXT," +
                     "${MyDBContract.Dday.product_price} INTEGER," +
-                    "${MyDBContract.Dday.product_memo} TEXT," +
-                    "${MyDBContract.Dday.place_name} TEXT," +
-                    "${MyDBContract.Dday.hourly} INTEGER," +
+                    "${MyDBContract.Dday.salary} INTEGER," +
                     "PRIMARY KEY (${MyDBContract.Dday.product_name}, ${MyDBContract.Dday.Dday})," +
                     "CONSTRAINT PRODUCT_NAME_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.product_name})" +
                     "REFERENCES ${MyDBContract.Product.TABLE_NAME} (${MyDBContract.Product.product_name})" +
                     "ON DELETE SET NULL," +
                     "CONSTRAINT PRICE_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.product_price})" +
                     "REFERENCES ${MyDBContract.Product.TABLE_NAME} (${MyDBContract.Product.price})" +
-                    "ON DELETE SET NULL," +
-                    "CONSTRAINT MEMO_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.product_memo})" +
-                    "REFERENCES ${MyDBContract.Product.TABLE_NAME} (${MyDBContract.Product.memo})" +
-                    "ON DELETE SET NULL," +
-                    "CONSTRAINT PLACE_NAME_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.place_name})" +
-                    "REFERENCES ${MyDBContract.WorkPlace.TABLE_NAME} (${MyDBContract.WorkPlace.place_name})" +
-                    "ON DELETE SET NULL," +
-                    "CONSTRAINT HOURLY_DDAY_FK FOREIGN KEY (${MyDBContract.Dday.hourly})" +
-                    "REFERENCES ${MyDBContract.WorkTime.TABLE_NAME} (${MyDBContract.WorkTime.hourly})" +
                     "ON DELETE SET NULL);"
 
         val SQL_DELETE_WORK_PLACE_ENTRIES =
@@ -161,15 +148,13 @@ class MyDatabase {
                         }
                         Dday::class.java -> {
                             readList.add(clazz.getConstructor(
-                                Int::class.java, Int::class.java, String::class.java, Int::class.java, String::class.java, String::class.java, Int::class.java
+                                Int::class.java, Int::class.java, String::class.java, Int::class.java, Int::class.java
                             ).newInstance(
                                 cursor.getInt(0),
                                 cursor.getInt(1),
                                 cursor.getString(2),
                                 cursor.getInt(3),
-                                cursor.getString(4),
-                                cursor.getString(5),
-                                cursor.getInt(6)
+                                cursor.getInt(4)
                             ) as T)
                         }
                         else -> throw IllegalArgumentException("Unknown class type")

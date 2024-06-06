@@ -98,8 +98,6 @@
 
 <!--    아래의 레이아웃에 숫자 나오는칸을 Editext로 해놓았으니 필요시 수정하시면됩니다.-->
     <LinearLayout
-
-
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
@@ -118,16 +116,40 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="필요 근무시간"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/require_worktime"
+                android:textSize="15dp" />
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3" />
+                android:layout_weight="3"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="right">
+                    <TextView
+                        android:id="@+id/workTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/blue5"
+                        android:textSize="20dp"
+                        android:text="00"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/blue5"
+                        android:gravity="right"
+                        android:textSize="20dp"
+                        android:text="시간"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3px"
+                    android:background="@color/blue5"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -139,16 +161,41 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="필요 근무일수"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="15dp" />
 
-            <EditText
-                android:id="@+id/require_workday"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3" />
+                android:layout_weight="3"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="right">
+                    <TextView
+                        android:id="@+id/workDay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/blue5"
+                        android:textSize="20dp"
+                        android:text="00"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/blue5"
+                        android:gravity="right"
+                        android:textSize="20dp"
+                        android:text="일"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3px"
+                    android:background="@color/blue5"/>
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

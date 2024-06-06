@@ -1,5 +1,6 @@
 package com.example.timeconversionapplication
 
+import MyAdapter
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.ContentValues
@@ -36,9 +37,9 @@ class JobRegisDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val place_name = intent.getStringExtra("place_name") ?: ""
-        val salary_style = intent.getIntExtra("salary_style", 0)
-        val sal_day = intent.getStringExtra("salary_day") ?: ""
+//        val place_name = intent.getStringExtra("place_name") ?: ""
+//        val salary_style = intent.getIntExtra("salary_style", 0)
+//        val sal_day = intent.getStringExtra("salary_day") ?: ""
         val tax = intent.getDoubleExtra("tax", 0.0)
         /*binding.taxexample.text = tax.toString()
         binding.nameexample.text = place_name.toString()
@@ -449,12 +450,15 @@ class JobRegisDetailActivity : AppCompatActivity() {
                     naviIntent.putExtra("fragment", TAG_HOME)
                     startActivity(naviIntent)
 
+                    Log.d("TAG", "버튼 클릭 ")
+
                 } catch (e: NumberFormatException) {
                     // Log and handle the number format exception
                     Log.d("TAG", "Break time, hourly wage, or total wage must be a number. Provided: breakTime='$breakTimeText', hourly='$hourlyText', wage='${binding.totalIncome.text.toString()}'")
                 }
             } else {
                 Toast.makeText(this, "모든 값을 전부 입력하세요.", Toast.LENGTH_SHORT).show()
+                Log.d("TAG", "$hourlyText, $totalDayCount, $startTime, $endTime")
             }
         }
     }

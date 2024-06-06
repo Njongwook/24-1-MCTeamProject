@@ -49,13 +49,6 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProductBinding.inflate(inflater, container, false)
-        // Fragment 외부의 View에 대해 터치 이벤트를 감지하여 포커스를 잃으면 키보드를 숨김
-        binding.root.viewTreeObserver.addOnGlobalFocusChangeListener { _, newFocus ->
-            if (newFocus !is EditText) {
-                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
-            }
-        }
         binding.findPrice.apply {
             setOnClickListener {
                 val productName = binding.productName.text.toString()
@@ -114,7 +107,7 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
 
                 val newElement = Product(name, price, memo)
 
-                // 데이터베이스에 새로운 WorkPlace 객체 삽입 - db 연결에 필요
+
                 dbHelper.use {
                     val db = dbHelper.writableDatabase
                     val values = ContentValues().apply {
@@ -134,6 +127,41 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
 
                 val imm: InputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
+
+                //Dtime, Dday 계산 기능 구현
+                val Dtime = 0
+                val Dday = 0
+                var salary = 0
+
+                // workTime의 wage 값 모두 더해서 salary 만들기
+                val db = dbHelper.readableDatabase
+                val cursor = db.rawQuery("SELECT wage FROM worktime", null)
+
+                if (cursor.moveToFirst()) {
+                    do {
+                        val wage = cursor.getInt(cursor.getColumnIndexOrThrow("wage"))
+                        salary += wage
+                    } while (cursor.moveToNext())
+                }
+                cursor.close()
+
+                //dday 데이터 저장
+                dbHelper.use {
+                    val db = dbHelper.writableDatabase
+                    val values = ContentValues().apply {
+                        put("Dtime", Dtime)
+                        put("Dday", Dday)
+                        put("product_name", name)
+                        put("product_price", price)
+                        put("salary", salary)
+                    }
+
+                    db.insert("dday", null, values)
+                }
+
+                binding.workTime.text = Dtime.toString()
+                binding.workDay.text = Dday.toString()
+
             }
         }
         return binding.root
