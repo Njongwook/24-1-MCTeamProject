@@ -8,6 +8,7 @@
     android:padding="15dp"
     android:id="@+id/recycler_view">
     <TextView
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0000.00.00 - 00.00"
@@ -62,11 +63,4 @@
         android:layout_width="match_parent"
         android:layout_height="5px"
         android:background="@color/white"/>
-    <android.widget.Button
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:text="근무등록"
-        android:textColor="@color/white"
-        android:background="@color/blue3"/>
 </LinearLayout>

@@ -17,6 +17,7 @@ class MyAdapter(private var dataSet: MutableList<Any>) : RecyclerView.Adapter<Re
         fun bind(time: WorkTime) {
             binding.placeName.text = time.place_name
             binding.wage.text = time.wage.toString()
+            binding.date.text = time.date
         }
     }
 
