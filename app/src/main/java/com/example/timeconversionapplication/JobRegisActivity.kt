@@ -37,19 +37,6 @@ class JobRegisActivity : AppCompatActivity() {
             Log.d("TAG", e.toString())
         }
         val adapter = MyAdapter(getList)
-        // 신유빈 코드 시작 --------------------------------------------------------------------------------------------
-//        // WorkPlace 타입의 데이터를 조회하여 MutableList<Any>로 변환 - db 연결에 필요
-//        val getList: MutableList<Any> = dbHelper.selectAll("workplace", WorkPlace::class.java).toMutableList()
-//
-//        // 가져온 데이터를 로그로 출력합니다. - 없어도 됨. 디버깅 용
-//        for (e in getList) {
-//            Log.d("TAG", e.toString())
-//        }
-//
-//        // 어댑터에 데이터를 설정합니다. - db 연결에 필요
-//        val adapter = MyAdapter(getList)
-
-        // 신유빈 코드 종료 --------------------------------------------------------------------------------------------
 
         var salaryStyle = 0
         binding.daySalary.setOnClickListener{

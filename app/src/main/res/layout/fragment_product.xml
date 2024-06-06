@@ -83,17 +83,21 @@
             android:id="@+id/memo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/product_save"
-            android:text="저장"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue3"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_margin="5dp"
-            android:layout_gravity="end"/>
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/product_save"
+                android:text="저장"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/blue3"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
     </LinearLayout>
 
 <!--    아래의 레이아웃에 숫자 나오는칸을 Editext로 해놓았으니 필요시 수정하시면됩니다.-->

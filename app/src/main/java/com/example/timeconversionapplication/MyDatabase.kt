@@ -29,6 +29,7 @@ class MyDatabase {
             const val product_name = "product_name"
             const val price = "price"
             const val memo = "memo"
+            const val Dday = "dday"
         }
         object Dday : BaseColumns{
             const val TABLE_NAME = "Dday"
@@ -61,7 +62,8 @@ class MyDatabase {
             "CREATE TABLE ${MyDBContract.Product.TABLE_NAME}(" +
                     "${MyDBContract.Product.product_name} TEXT PRIMARY KEY," +
                     "${MyDBContract.Product.price} INTEGER," +
-                    "${MyDBContract.Product.memo} TEXT);"
+                    "${MyDBContract.Product.memo} TEXT," +
+                    "${MyDBContract.Product.Dday} TEXT);"
         val SQL_CREATE_DDAY_ENTRIES =
             "CREATE TABLE ${MyDBContract.Dday.TABLE_NAME}(" +
                     "${MyDBContract.Dday.Dtime} INTEGER," +
@@ -139,11 +141,12 @@ class MyDatabase {
                         }
                         Product::class.java -> {
                             readList.add(clazz.getConstructor(
-                                String::class.java, Int::class.java, String::class.java
+                                String::class.java, Int::class.java, String::class.java, String::class.java
                             ).newInstance(
                                 cursor.getString(0),
                                 cursor.getInt(1),
-                                cursor.getString(2)
+                                cursor.getString(2),
+                                cursor.getString(3)
                             ) as T)
                         }
                         Dday::class.java -> {
