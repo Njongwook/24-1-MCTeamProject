@@ -29,6 +29,7 @@ class MyDatabase {
             const val product_name = "product_name"
             const val price = "price"
             const val memo = "memo"
+            const val Dday = "dday"
         }
         object Dday : BaseColumns{
             const val TABLE_NAME = "Dday"
@@ -61,7 +62,8 @@ class MyDatabase {
             "CREATE TABLE ${MyDBContract.Product.TABLE_NAME}(" +
                     "${MyDBContract.Product.product_name} TEXT PRIMARY KEY," +
                     "${MyDBContract.Product.price} INTEGER," +
-                    "${MyDBContract.Product.memo} TEXT);"
+                    "${MyDBContract.Product.memo} TEXT," +
+                    "${MyDBContract.Product.Dday} TEXT);"
         val SQL_CREATE_DDAY_ENTRIES =
             "CREATE TABLE ${MyDBContract.Dday.TABLE_NAME}(" +
                     "${MyDBContract.Dday.Dtime} INTEGER," +
@@ -139,11 +141,12 @@ class MyDatabase {
                         }
                         Product::class.java -> {
                             readList.add(clazz.getConstructor(
-                                String::class.java, Int::class.java, String::class.java
+                                String::class.java, Int::class.java, String::class.java, String::class.java
                             ).newInstance(
                                 cursor.getString(0),
                                 cursor.getInt(1),
-                                cursor.getString(2)
+                                cursor.getString(2),
+                                cursor.getString(3)
                             ) as T)
                         }
                         Dday::class.java -> {
@@ -166,25 +169,20 @@ class MyDatabase {
             return readList
         }
 
-        fun selectByDate(date: String): WorkTime? {
-            val db = readableDatabase
-            val cursor = db.rawQuery("SELECT * FROM ${MyDBContract.WorkTime.TABLE_NAME} WHERE ${MyDBContract.WorkTime.date} = ?", arrayOf(date))
-            var workTime: WorkTime? = null
-            with(cursor) {
-                if (moveToFirst()) {
-                    workTime = WorkTime(
-                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.date)),
-                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.work_time)),
-                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.break_time)),
-                        getString(getColumnIndexOrThrow(MyDBContract.WorkTime.place_name)),
-                        getInt(getColumnIndexOrThrow(MyDBContract.WorkTime.hourly)),
-                        getInt(getColumnIndexOrThrow(MyDBContract.WorkTime.wage))
-                    )
+        fun getSalaryDay(): Int? {
+            val db = this.readableDatabase
+            val cursor = db.query(
+                MyDatabase.MyDBContract.WorkPlace.TABLE_NAME,
+                arrayOf(MyDatabase.MyDBContract.WorkPlace.salary_day),
+                null, null, null, null, null
+            )
+
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    return it.getInt(it.getColumnIndexOrThrow(MyDatabase.MyDBContract.WorkPlace.salary_day))
                 }
             }
-            cursor.close()
-            db.close()
-            return workTime
+            return null
         }
     }
 }

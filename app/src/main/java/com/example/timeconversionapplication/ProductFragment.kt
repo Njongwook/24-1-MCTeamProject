@@ -28,6 +28,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.math.ceil
 
 class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListener {
     private lateinit var dbHelper: MyDatabase.MyDBHelper
@@ -94,19 +95,64 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
                 val priceText = binding.productPrice.text.toString()
                 var memo = binding.memo.text.toString()
 
-                if (name.isBlank() || priceText.isBlank()){
+                if (name.isBlank() || priceText.isBlank()) {
                     Log.d("TAG", "All fields must be filled out")
-                    Toast.makeText(context,"All fields must be filled out", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "All fields must be filled out", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-                if (memo.isBlank()){
+                if (memo.isBlank()) {
                     memo = ""
                 }
 
                 val price = priceText.toInt()
 
-                val newElement = Product(name, price, memo)
+                // Dtime, Dday 계산 기능 구현
+                var Dtime = 0
+                var Dday = 0
+                var salary = 0
+                var hourlySum = 0
 
+                // workTime의 wage 값 모두 더해서 salary 만들기
+                dbHelper.use {
+                    val db = dbHelper.readableDatabase
+
+                    val cursor = db.rawQuery("SELECT wage FROM worktime", null)
+                    if (cursor.moveToFirst()) {
+                        do {
+                            val wage = cursor.getInt(cursor.getColumnIndexOrThrow("wage"))
+                            salary += wage
+                        } while (cursor.moveToNext())
+                    }
+                    cursor.close()
+
+                    val cursor2 = db.rawQuery("SELECT hourly FROM worktime", null)
+                    if (cursor2.moveToFirst()) {
+                        do {
+                            val hourly = cursor2.getInt(cursor2.getColumnIndexOrThrow("hourly"))
+                            hourlySum += hourly
+                        } while (cursor2.moveToNext())
+                    }
+                    cursor2.close()
+
+                    Dtime = ceil(price.toDouble() / hourlySum).toInt()
+                    Dday = ceil(price.toDouble() / salary).toInt()
+
+                    // dday 데이터 저장
+                    val ddayValues = ContentValues().apply {
+                        put("Dtime", Dtime)
+                        put("Dday", Dday)
+                        put("product_name", name)
+                        put("product_price", price)
+                        put("salary", salary)
+                    }
+
+                    db.insert("dday", null, ddayValues)
+                }
+
+                Log.d("TAG", "Dtime: $Dtime")
+                Log.d("TAG", "Dday: $Dday")
+
+                val newElement = Product(name, price, memo, Dday.toString())
 
                 dbHelper.use {
                     val db = dbHelper.writableDatabase
@@ -114,6 +160,7 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
                         put("product_name", name)
                         put("price", price)
                         put("memo", memo)
+                        put("Dday",Dday)
                     }
 
                     db.insert("product", null, values)
@@ -128,42 +175,11 @@ class ProductFragment : Fragment(), ProductDialogFragment.OnProductSelectedListe
                 val imm: InputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
 
-                //Dtime, Dday 계산 기능 구현
-                val Dtime = 0
-                val Dday = 0
-                var salary = 0
-
-                // workTime의 wage 값 모두 더해서 salary 만들기
-                val db = dbHelper.readableDatabase
-                val cursor = db.rawQuery("SELECT wage FROM worktime", null)
-
-                if (cursor.moveToFirst()) {
-                    do {
-                        val wage = cursor.getInt(cursor.getColumnIndexOrThrow("wage"))
-                        salary += wage
-                    } while (cursor.moveToNext())
-                }
-                cursor.close()
-
-                //dday 데이터 저장
-                dbHelper.use {
-                    val db = dbHelper.writableDatabase
-                    val values = ContentValues().apply {
-                        put("Dtime", Dtime)
-                        put("Dday", Dday)
-                        put("product_name", name)
-                        put("product_price", price)
-                        put("salary", salary)
-                    }
-
-                    db.insert("dday", null, values)
-                }
-
                 binding.workTime.text = Dtime.toString()
                 binding.workDay.text = Dday.toString()
-
             }
         }
+
         return binding.root
 
     }
