@@ -1,15 +1,15 @@
 import android.annotation.SuppressLint
-import android.util.Log
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.timeconversionapplication.Dday
+import com.example.timeconversionapplication.MyDatabase
 import com.example.timeconversionapplication.Product
 import com.example.timeconversionapplication.WorkTime
 import com.example.timeconversionapplication.databinding.ListPlaceBinding
 import com.example.timeconversionapplication.databinding.ListProductBinding
 
-class MyAdapter(private var dataSet: MutableList<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyAdapter(private var dataSet: MutableList<Any>, private val dbHelper: MyDatabase.MyDBHelper) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_PLACE = 1
     private val VIEW_TYPE_PRODUCT = 2
@@ -19,6 +19,16 @@ class MyAdapter(private var dataSet: MutableList<Any>) : RecyclerView.Adapter<Re
             binding.placeName.text = time.place_name
             binding.wage.text = time.wage.toString()
             binding.date.text = time.date
+
+            binding.delete.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    dbHelper.deleteWorkTime(time.date)  // 데이터베이스에서 삭제
+                    dataSet.removeAt(position)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, dataSet.size)
+                }
+            }
         }
     }
 
@@ -27,6 +37,16 @@ class MyAdapter(private var dataSet: MutableList<Any>) : RecyclerView.Adapter<Re
             binding.memo.text = product.memo
             binding.productName.text = product.product_name
             binding.dday.text = product.Dday
+
+            binding.delete.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    dbHelper.deleteProduct(product.product_name)  // 데이터베이스에서 삭제
+                    dataSet.removeAt(position)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, dataSet.size)
+                }
+            }
         }
     }
 
@@ -71,19 +91,14 @@ class MyAdapter(private var dataSet: MutableList<Any>) : RecyclerView.Adapter<Re
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(newList: MutableList<Any>) {
-        this.dataSet = newList
-        notifyDataSetChanged()
-    }
-
-    fun addItem(item: Any){
-        dataSet.add(item)
-        notifyItemInserted(dataSet.size-1)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
     fun updateData(newData: MutableList<Any>) {
-        dataSet = newData
+        dataSet.clear()
+        dataSet.addAll(newData)
         notifyDataSetChanged()
+    }
+
+    fun addItem(item: Any) {
+        dataSet.add(item)
+        notifyItemInserted(dataSet.size - 1)
     }
 }

@@ -68,10 +68,10 @@ class HomeFragment : Fragment() {
         binding.recyclerView2.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView2.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
 
-        adapter = MyAdapter(mutableListOf())
+        adapter = MyAdapter(mutableListOf(), dbHelper)
         binding.recyclerView1.adapter = adapter
 
-        adapter2 = MyAdapter(mutableListOf())
+        adapter2 = MyAdapter(mutableListOf(), dbHelper)
         binding.recyclerView2.adapter = adapter2
     }
 

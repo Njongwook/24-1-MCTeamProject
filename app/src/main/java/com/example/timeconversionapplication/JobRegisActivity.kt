@@ -36,7 +36,7 @@ class JobRegisActivity : AppCompatActivity() {
         for (e in getList) {
             Log.d("TAG", e.toString())
         }
-        val adapter = MyAdapter(getList)
+        val adapter = MyAdapter(getList, dbHelper)
 
         var salaryStyle = 0
         binding.daySalary.setOnClickListener{
