@@ -31,15 +31,11 @@ class JobRegisDetailActivity : AppCompatActivity() {
     private val dbHelper = MyDatabase.MyDBHelper(this)
     private lateinit var binding: PartTimeJobRegisDetailsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        // 신유빈 코드 시작--------------------------------------------------------------------------------------------
         binding = PartTimeJobRegisDetailsBinding.inflate(layoutInflater)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(binding.root)
 
 
-//        val place_name = intent.getStringExtra("place_name") ?: ""
-//        val salary_style = intent.getIntExtra("salary_style", 0)
-//        val sal_day = intent.getStringExtra("salary_day") ?: ""
         val tax = intent.getDoubleExtra("tax", 0.0)
 
 
@@ -53,13 +49,11 @@ class JobRegisDetailActivity : AppCompatActivity() {
         }
 
         // 어댑터에 데이터를 설정합니다. - db 연결에 필요
-        val adapter = MyAdapter(getList)
+        val adapter = MyAdapter(getList, dbHelper)
 
         var breakTime = 0
         var hourly = 0
 
-//
-        // 신유빈 코드 종료--------------------------------------------------------------------------------------------
 
         super.onCreate(savedInstanceState)
         var startDate: String = ""
