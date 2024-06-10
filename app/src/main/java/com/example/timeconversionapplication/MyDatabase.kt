@@ -108,6 +108,18 @@ class MyDatabase {
             const val DATABASE_NAME = "myDBfile.db"
         }
 
+        fun deleteProduct(productName: String) {
+            val db = writableDatabase
+            db.delete(MyDBContract.Product.TABLE_NAME, "${MyDBContract.Product.product_name} = ?", arrayOf(productName))
+            db.close()
+        }
+
+        fun deleteWorkTime(date: String) {
+            val db = writableDatabase
+            db.delete(MyDBContract.WorkTime.TABLE_NAME, "${MyDBContract.WorkTime.date} = ?", arrayOf(date))
+            db.close()
+        }
+
         fun <T> selectAll(tableName: String, clazz: Class<T>): MutableList<T> {
             val readList = mutableListOf<T>()
             val db = readableDatabase

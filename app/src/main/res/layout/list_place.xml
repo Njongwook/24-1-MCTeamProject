@@ -63,4 +63,13 @@
         android:layout_width="match_parent"
         android:layout_height="5px"
         android:background="@color/white"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/delete"
+        android:text="삭제"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue3"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_gravity="end"/>
 </LinearLayout>
